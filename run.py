@@ -245,6 +245,18 @@ def resolve_war(player, computer, war_pile, bet):
         return "Tie"
 
 
+def compare_cards(player_card, computer_card):
+    player_value = get_card_value(player_card)
+    computer_value = get_card_value(computer_card)
+
+    if player_value > computer_value:
+        return "Player"
+    elif player_value < computer_value:
+        return "Computer"
+    else:
+        return "Tie"
+
+
 
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
