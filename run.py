@@ -121,4 +121,26 @@ class Player:
         self.cards_won = 0
 
 
+def get_card_value(card):
+    """
+    Returns the value of a card based on its rank.
+
+    Args:
+        card (Card): The card object whose value is to be determined.
+
+    Returns:
+        int: The index of the card's rank in the Card.RANKS list.
+    """
+    return Card.RANKS.index(card.rank)
+
+
+def create_deck():
+    return [Card(suit, rank) for suit in Card.SUITS for rank in Card.RANKS]
+
+
+def draw_cards(deck, num_cards):
+    return [deck.pop(0) for _ in range(min(num_cards, len(deck)))]
+
+
+
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
