@@ -257,6 +257,41 @@ def compare_cards(player_card, computer_card):
         return "Tie"
 
 
+def apply_power_card_effect(card, player, computer):
+    """
+    Applies the effect of a power card based on its rank.
+
+    Parameters:
+    card (Card): The card being played, which has a rank attribute.
+    player (Player): The player who played the card.
+    computer (Player): The opponent player.
+
+    Returns:
+    int: The multiplier for the bet (2 if the card is a King, otherwise 1).
+
+    Effects:
+    - If the card is a Jack, the player steals 2 cards from the opponent.
+    - If the card is a Queen, the player gains 5 extra chips.
+    - If the card is a King, the player's bet for the round is doubled.
+    - If the card is an Ace, the player's chips are protected in the next war.
+    """
+    if card.rank == 'J':
+        print(f"{BLUE}Jack's Power:{RESET} Steal 2 cards from the opponent!")
+        stolen_cards = draw_cards(computer.deck, 2)
+        player.deck.extend(stolen_cards)
+        player.cards_won += 2
+        computer.cards_won -= 2
+    elif card.rank == 'Q':
+        print(f"{BLUE}Queen's Power:{RESET} Gain 5 extra chips!")
+        player.chips += 5
+    elif card.rank == 'K':
+        print(f"{BLUE}King's Power:{RESET} Double your bet for this round!")
+        return 2
+    elif card.rank == 'A':
+        print(f"{BLUE}Ace's Power:{RESET} Protect your chips in the next war!")
+        player.protected = True
+    return 1
+
 
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
