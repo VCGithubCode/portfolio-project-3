@@ -348,6 +348,36 @@ def display_instructions():
     input("\nPress Enter to return to the main menu...")
 
 
+def save_high_score(player):
+    high_scores = []
+    if os.path.exists("high_scores.json"):
+        with open("high_scores.json", "r") as f:
+            high_scores = json.load(f)
+
+    # Update existing score or add new score
+    updated = False
+    for score in high_scores:
+        if score["name"] == player.name:
+            score["highest_score"] = max(score["highest_score"], player.score)
+            score["most_cards"] = max(score["most_cards"], player.cards_won)
+            score["most_chips"] = max(score["most_chips"], player.chips)
+            updated = True
+            break
+
+    if not updated:
+        high_scores.append({
+            "name": player.name,
+            "highest_score": player.score,
+            "most_cards": player.cards_won,
+            "most_chips": player.chips
+        })
+
+    high_scores.sort(key=lambda x: x["highest_score"], reverse=True)
+    high_scores = high_scores[:10]  # Keep only top 10 scores
+
+    with open("high_scores.json", "w") as f:
+        json.dump(high_scores, f)
+
 
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
