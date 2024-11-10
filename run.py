@@ -704,4 +704,52 @@ def play_game(player_name):
     display_leaderboards()
 
 
-print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
+def main():
+    """
+    Main function to run the game application.
+
+    This function displays a welcome screen and prompts the user
+    to enter a choice from the menu. Based on the user's
+    choice, it will either start the game, display instructions,
+    show leaderboards, provide a tutorial, or exit the game.
+
+    Choices:
+    1. Start the game by entering the player's name.
+    2. Display game instructions.
+    3. Display the leaderboards.
+    4. Show the tutorial.
+    5. Exit the game.
+
+    The function runs in a loop until the user chooses to exit.
+
+    Returns:
+        None
+    """
+    while True:
+        display_welcome_screen()
+        choice = get_user_input("Enter your choice (1-5): ", range(1, 6))
+
+        if choice == 1:
+            while True:
+                player_name = input("Enter your name (or "
+                                    "type 'quit' to exit): ")
+                if player_name.lower() == 'quit':
+                    break  # Exit the loop if the user wants to quit
+                if len(player_name) < 1 or len(player_name) > 20:
+                    print("Name must be between 1 and 20 characters.")
+                    continue  # Prompt again for a valid name
+                play_game(player_name)
+                break  # Exit the name input loop if valid name is provided
+        elif choice == 2:
+            display_instructions()
+        elif choice == 3:
+            display_leaderboards()
+        elif choice == 4:
+            tutorial()
+        elif choice == 5:
+            print("Thanks for playing!")
+            break
+
+
+if __name__ == "__main__":
+    main()
