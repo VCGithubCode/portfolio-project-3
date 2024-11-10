@@ -294,6 +294,9 @@ def apply_power_card_effect(card, player, computer):
 
 
 def display_welcome_screen():
+
+    print("\n")
+    print("\n")
     print(MAGENTA + """
     ██╗    ██╗ █████╗ ██████╗     ██████╗ █████╗ ██████╗ ██████╗ ███████╗
     ██║    ██║██╔══██╗██╔══██╗   ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
@@ -728,9 +731,6 @@ def main():
     while True:
         display_welcome_screen()
         choice = get_user_input("Enter your choice (1-5): ", range(1, 6))
-
-        print("\n")
-        print("\n")
 
         if choice == 1:
             while True:
