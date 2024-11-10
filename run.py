@@ -477,4 +477,27 @@ def calculate_max_bet(player_chips, remaining_rounds):
         player_chips // remaining_rounds, player_chips))
 
 
+def handle_exit(signum, frame):
+    """
+    Handle the exit signal and perform a graceful shutdown.
+
+    This function is intended to be used as a signal handler for
+    interrupt signals (e.g., SIGINT). When the signal is received,
+    it prints a message indicating that the game was interrupted
+    and then exits the program gracefully.
+
+    Parameters:
+    signum (int): The signal number.
+    frame (FrameType): The current stack frame (or None).
+
+    Returns:
+    None
+    """
+    print("\nGame interrupted. Exiting gracefully...")
+    exit(0)
+
+
+signal.signal(signal.SIGINT, handle_exit)
+
+
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
