@@ -470,5 +470,11 @@ def tutorial():
     input("Press Enter to return to the main menu...")
 
 
+def calculate_max_bet(player_chips, remaining_rounds):
+    """Calculate the maximum allowed bet based on
+    remaining chips and rounds."""
+    return max(MINIMUM_BET, min(
+        player_chips // remaining_rounds, player_chips))
+
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
