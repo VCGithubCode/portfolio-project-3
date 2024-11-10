@@ -413,5 +413,62 @@ def display_leaderboards():
     input("\nPress Enter to return to the main menu...")
 
 
+def tutorial():
+    print("\nWelcome to the War Card Game Tutorial!")
+
+    steps = [
+        f"Step 1: Starting the Game\nEach player starts "
+        f"with {INITIAL_CHIPS} chips.\n"
+        "The deck is shuffled and divided equally between "
+        "you and the computer.",
+        "Step 2: Card Values\nCards are ranked from lowest to "
+        "highest: 2, 3, 4, ..., 10, J, Q, K, A",
+        "Step 3: Betting\nBefore each round, you can bet any number of chips "
+        "(minimum 1, maximum based on remaining rounds).",
+        "Step 4: Playing a Round\nBoth players reveal their top card. "
+        "The higher card wins the round and the bet.",
+        "Step 5: War\nIf both players reveal cards of the "
+        "same rank, a 'war' occurs.\n"
+        "The bet is doubled, and each player puts down "
+        "3 face-down cards and 1 face-up card.\n"
+        "The player with the higher face-up card "
+        "wins all the cards played and the increased bet.",
+        "Step 6: Power Cards\nFace cards have special powers when played:\n"
+        "- Jack: Steal 2 cards from the opponent\n"
+        "- Queen: Gain 5 extra chips\n"
+        "- King: Double your bet for this round\n"
+        "- Ace: Protect your chips in the next war",
+        "Step 7: Winning the Game\nThe game ends after "
+        "the chosen number of rounds, "
+        "when a player runs out of cards, or goes bankrupt.\n"
+        "Your final score is calculated as: (cards * 10) + chips\n"
+        "Be aware that going bankrupt will deduct "
+        "100 points from your score.\n"
+        "Bankrupting the computer will reward you with an extra 100 points.\n"
+        "You can exit the game by typing 'quit'.\n"
+        "The player with the highest total score wins the game.\n"
+        "Leaderboards track highest score, most cards "
+        "won, and most chips across all games."
+    ]
+
+    for step in steps:
+        print(f"\n{step}")
+        while True:
+            user_input = input("Press Enter to continue "
+                               "or type 'quit' or 'exit' to return "
+                               "to the main menu: ")
+            if user_input.lower() == 'quit' or user_input.lower() == 'exit':
+                print("Exiting the tutorial...")
+                return  # Exit the tutorial
+            elif user_input == '':
+                break  # Valid input to continue
+            else:
+                print("Invalid input. Please press Enter to continue "
+                      "or type 'quit' to exit.")
+
+    print("\nGood luck and have fun!")
+    input("Press Enter to return to the main menu...")
+
+
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
