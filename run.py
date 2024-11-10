@@ -13,4 +13,10 @@ YELLOW = '\033[33m'
 BLUE = '\033[34m'
 WHITE = '\033[37m'
 
+# Game constants
+INITIAL_CHIPS = 100
+MINIMUM_BET = 1
+MIN_ROUNDS = 4
+MAX_ROUNDS = 26
+
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
