@@ -90,4 +90,35 @@ class Card:
     +-------+"""
 
 
+class Player:
+    """
+    A class to represent a player in the game.
+
+    Attributes:
+    ----------
+    name : str
+        The name of the player.
+    deck : list
+        The deck of cards the player has.
+    chips : int
+        The number of chips the player has.
+    score : int
+        The score of the player.
+    cards_won : int
+        The number of cards the player has won.
+
+    Methods:
+    -------
+    __init__(name):
+        Initializes the player with a name, an empty deck,
+        initial chips, a score of 0, and 0 cards won.
+    """
+    def __init__(self, name):
+        self.name = name
+        self.deck = []
+        self.chips = INITIAL_CHIPS
+        self.score = 0
+        self.cards_won = 0
+
+
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
