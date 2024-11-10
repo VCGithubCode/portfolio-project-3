@@ -293,5 +293,37 @@ def apply_power_card_effect(card, player, computer):
     return 1
 
 
+def display_welcome_screen():
+    print(MAGENTA + """
+    ██╗    ██╗ █████╗ ██████╗     ██████╗ █████╗ ██████╗ ██████╗ ███████╗
+    ██║    ██║██╔══██╗██╔══██╗   ██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔════╝
+    ██║ █╗ ██║███████║██████╔╝   ██║     ███████║██████╔╝██║  ██║███████╗
+    ██║███╗██║██╔══██║██╔══██╗   ██║     ██╔══██║██╔══██╗██║  ██║╚════██║
+    ╚███╔███╔╝██║  ██║██║  ██║   ╚██████╗██║  ██║██║  ██║██████╔╝███████║
+     ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝
+    """ + RESET)
+
+    # Generate 4 random player cards in ASCII art
+    deck = create_deck()
+    random_cards = random.sample(deck, 4)
+
+    # Print the cards in a horizontal row
+    card_lines = [card.ascii_art().splitlines() for card in random_cards]
+    for i in range(8):
+        # Each card has 7 lines of ASCII art
+        # Add 5 spaces to the left for centering
+        print("     " + "   ".join(line[i] for line in card_lines))
+
+    print("\n")
+    print("Welcome to the Enhanced War Card Game!")
+    print("\nMain Menu:")
+    print("1. Play Game")
+    print("2. See Instructions")
+    print("3. See Leaderboards")
+    print("4. Tutorial")
+    print("5. Quit")
+
+
+
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
