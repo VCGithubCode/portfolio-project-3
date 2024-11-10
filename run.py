@@ -142,5 +142,109 @@ def draw_cards(deck, num_cards):
     return [deck.pop(0) for _ in range(min(num_cards, len(deck)))]
 
 
+def war_round(player, computer, war_pile, bet):
+    """
+    Conducts a round of war in the card game between
+    the player and the computer.
+
+    In a war round, each player puts down 3 face-down cards and 1 face-up card.
+    The face-up cards are compared to determine the winner of the war round.
+    If a player does not have enough cards to continue
+    the war, the war is resolved.
+
+    Args:
+        player (Player): The player object containing
+        the player's deck and chips.
+        computer (Player): The computer object
+        containing the computer's deck and chips.
+        war_pile (list): The pile of cards that are at stake in the war round.
+        bet (int): The number of chips being bet on the war round.
+
+    Returns:
+        str: The result of the war round, either "Player", "Computer", or
+        continues the war.
+    """
+    if len(player.deck) < 4 or len(computer.deck) < 4:
+        return resolve_war(player, computer, war_pile, bet)
+
+    war_pile.extend(draw_cards(player.deck, 3))
+    war_pile.extend(draw_cards(computer.deck, 3))
+    player_card = draw_cards(player.deck, 1)[0]
+    computer_card = draw_cards(computer.deck, 1)[0]
+    war_pile.extend([player_card, computer_card])
+
+    print(f"{YELLOW}War!{RESET} Each player puts down 3 face-down "
+          "cards and 1 face-up card...")
+    time.sleep(1)
+    print("Your face-up card for war:")
+    print(player_card.ascii_art())
+    print("Computer's face-up card for war:")
+    print(computer_card.ascii_art())
+
+    result = compare_cards(player_card, computer_card)
+    if result == "Player":
+        print(f"{GREEN}You win the war!{RESET}\n")
+        player.deck.extend(war_pile)
+        player.chips += bet
+        player.cards_won += len(war_pile)
+        computer.chips -= bet
+        return "Player"
+    elif result == "Computer":
+        print(f"{RED}Computer wins the war!{RESET}\n")
+        computer.deck.extend(war_pile)
+        computer.chips += bet
+        computer.cards_won += len(war_pile)
+        player.chips -= bet
+        return "Computer"
+    else:
+        print(f"{YELLOW}The war continues! Preparing "
+              "for another round of war...{RESET}\n")
+        time.sleep(1)
+        return war_round(player, computer, war_pile, bet * 2)
+
+
+def resolve_war(player, computer, war_pile, bet):
+    """
+    Resolves a war scenario in a card game between the player and the computer.
+
+    Parameters:
+    player (Player): The player object containing the
+    player's deck, chips, and cards won.
+    computer (Player): The computer object containing
+    the computer's deck, chips, and cards won.
+    war_pile (list): The pile of cards that are at stake in the war.
+    bet (int): The number of chips that are being
+    bet on the outcome of the war.
+
+    Returns:
+    str: The result of the war, either "Player", "Computer", or "Tie".
+    """
+    if len(player.deck) < len(computer.deck):
+        computer.deck.extend(war_pile)
+        computer.deck.extend(player.deck)
+        player.deck.clear()
+        computer.chips += bet
+        computer.cards_won += len(war_pile)
+        player.chips -= bet
+        return "Computer"
+    elif len(computer.deck) < len(player.deck):
+        player.deck.extend(war_pile)
+        player.deck.extend(computer.deck)
+        computer.deck.clear()
+        player.chips += bet
+        player.cards_won += len(war_pile)
+        computer.chips -= bet
+        return "Player"
+    else:
+        # In case of a tie with equal cards, split the war pile
+        mid = len(war_pile) // 2
+        player.deck.extend(war_pile[:mid])
+        computer.deck.extend(war_pile[mid:])
+        player.cards_won += len(war_pile) // 2
+        computer.cards_won += len(war_pile) // 2
+        return "Tie"
+
+
+
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
