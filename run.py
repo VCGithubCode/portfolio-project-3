@@ -537,4 +537,171 @@ def get_user_input(prompt, valid_range=None):
             return user_input
 
 
+def play_game(player_name):
+    """
+    Starts and manages the game loop for a card game
+    between a player and the computer.
+
+    Args:
+        player_name (str): The name of the player.
+
+    The game consists of multiple rounds where the player
+    and the computer draw cards from their decks,
+    place bets, and compare cards to determine the winner
+    of each round. The game continues until one
+    of the following conditions is met:
+        - The maximum number of rounds is reached.
+        - Either the player or the computer runs out of chips.
+        - Either the player or the computer runs out of cards.
+
+    The game includes special rules for "war" situations when
+    there is a tie, and power card effects
+    for certain high-ranking cards (J, Q, K, A).
+
+    At the end of the game, the final scores are calculated based
+    on the number of cards and chips
+    each player has. The player's score is saved, and the leaderboards
+    are displayed.
+
+    Raises:
+        ValueError: If the user input for the number of rounds or bet
+        is not valid.
+    """
+    player = Player(player_name)
+    computer = Player("Computer")
+
+    while True:
+        try:
+            max_rounds = get_user_input(
+                f"Enter the number of rounds to play "
+                f"({MIN_ROUNDS}-{MAX_ROUNDS}): ",
+                range(MIN_ROUNDS, MAX_ROUNDS + 1)
+            )
+            break
+        except ValueError:
+            print("Please enter a valid number.")
+
+    deck = create_deck()
+    random.shuffle(deck)
+
+    player.deck = deck[:26]
+    computer.deck = deck[26:]
+
+    rounds_played = 0
+
+    while (
+        player.deck
+        and computer.deck
+        and rounds_played < max_rounds
+        and player.chips > 0
+        and computer.chips > 0
+    ):
+        rounds_played += 1
+        remaining_rounds = max_rounds - rounds_played + 1
+        print(f"\n{YELLOW}Round {rounds_played} of {max_rounds}{RESET}")
+        print(f"Your cards: {len(player.deck)} - "
+              f"Computer's cards: {len(computer.deck)}")
+        print(f"Your chips: {player.chips} - "
+              f"Computer's chips: {computer.chips}")
+
+        max_bet = calculate_max_bet(player.chips, remaining_rounds)
+        bet = get_user_input(f"Enter your bet ({MINIMUM_BET}-{max_bet}): ",
+                             range(MINIMUM_BET, max_bet + 1))
+
+        # Confirm the bet amount
+        while True:
+            confirm_bet = input(
+                f"Are you sure about your bet amount of {bet}? (y/n): "
+            ).lower()
+            if confirm_bet == 'y':
+                break  # Proceed with the game
+            elif confirm_bet == 'n':
+                print("Please enter a new bet amount.")
+                bet = get_user_input(
+                    f"Enter your bet ({MINIMUM_BET}-{max_bet}): ",
+                    range(MINIMUM_BET, max_bet + 1)
+                )
+            else:
+                print("Invalid input. Please enter 'y' or 'n'.")
+
+        get_user_input("Press Enter to play a"
+                       " card (or type 'quit' to exit)...")
+
+        player_card = draw_cards(player.deck, 1)[0]
+        computer_card = draw_cards(computer.deck, 1)[0]
+
+        print("Your card:")
+        print(player_card.ascii_art())
+        print("Computer's card:")
+        print(computer_card.ascii_art())
+
+        bet_multiplier = 1
+        if player_card.rank in ['J', 'Q', 'K', 'A']:
+            bet_multiplier = apply_power_card_effect(
+                player_card, player, computer)
+
+        result = compare_cards(player_card, computer_card)
+
+        if result == "Player":
+            print(f"{GREEN}You win this round!{RESET}\n")
+            player.deck.extend([player_card, computer_card])
+            player.chips += bet
+            player.cards_won += 2
+            computer.chips -= bet
+        elif result == "Computer":
+            print(f"{RED}Computer wins this round!{RESET}\n")
+            computer.deck.extend([player_card, computer_card])
+            computer.chips += bet
+            computer.cards_won += 2
+            player.chips -= bet
+        else:
+            print(f"{YELLOW}It's a tie! Preparing for war...{RESET}\n")
+            war_pile = [player_card, computer_card]
+            war_bet = min(bet * bet_multiplier, player.chips, computer.chips)
+            war_result = war_round(player, computer, war_pile, war_bet)
+            if war_result != "Tie":
+                print(f"{GREEN if war_result == 'Player' else RED}"
+                      f"{war_result} wins the war!{RESET}")
+
+        if player.chips <= 0:
+            print(f"{RED}You are bankrupt! You lose 100 more chips!{RESET}")
+            player.chips -= 100
+            computer.chips += 100
+        elif computer.chips <= 0:
+            print(f"{GREEN}Computer is bankrupt! "
+                  f"You win 100 more chips!{RESET}")
+            computer.chips -= 100
+            player.chips += 100
+
+    print("\nGame Over!")
+    print(f"Your final card count: {len(player.deck)}")
+    print(f"Computer's final card count: {len(computer.deck)}")
+    print(f"Your final chip count: {player.chips}")
+    print(f"Computer's final chip count: {computer.chips}")
+    print(f"Total cards won: {player.cards_won}")
+
+    player_score = len(player.deck) * 10 + player.chips
+    computer_score = len(computer.deck) * 10 + computer.chips
+
+    player.score = player_score
+
+    print(f"\nYour final score: {player.score}")
+    print(f"Computer's final score: {computer_score}")
+    print("\nScore Breakdown:")
+    print(f"Your cards: {len(player.deck)} x 10 = {len(player.deck) * 10} "
+          "points")
+    print(f"Your chips: {player.chips} x 1 = {player.chips} points")
+    print(f"Total: {player_score} points")
+
+    if player.score > computer_score:
+        print(f"\n{GREEN}Congratulations! You win!{RESET}")
+    elif player.score < computer_score:
+        print(f"\n{RED}Computer wins. Better luck next time!{RESET}")
+    else:
+        print(f"\n{YELLOW}It's a tie!{RESET}")
+
+    save_high_score(player)
+    display_leaderboards()
+
+
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
