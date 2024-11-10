@@ -729,6 +729,9 @@ def main():
         display_welcome_screen()
         choice = get_user_input("Enter your choice (1-5): ", range(1, 6))
 
+        print("\n")
+        print("\n")
+
         if choice == 1:
             while True:
                 player_name = input("Enter your name (or "
