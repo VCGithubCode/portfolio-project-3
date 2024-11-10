@@ -515,7 +515,7 @@ def get_user_input(prompt, valid_range=None):
     while True:
         if not accepting_input:
             print("Input is currently disabled. Please wait.")
-            time.sleep(1) # Wait for 1 second
+            time.sleep(1)  # Wait for 1 second
             continue
 
         user_input = input(prompt).lower()
