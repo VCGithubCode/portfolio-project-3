@@ -379,5 +379,39 @@ def save_high_score(player):
         json.dump(high_scores, f)
 
 
+def display_leaderboards():
+    if os.path.exists("high_scores.json"):
+        with open("high_scores.json", "r") as f:
+            high_scores = json.load(f)
+
+        print("\nLeaderboards:")
+        print("\nHighest Scores:")
+        for i, score in enumerate(
+            sorted(
+                high_scores, key=lambda x: x
+                ["highest_score"], reverse=True)[:5], 1
+        ):
+            print(f"{i}. {score['name']}: {score['highest_score']} points")
+
+        print("\nMost Cards Won:")
+        for i, score in enumerate(
+            sorted(
+                high_scores, key=lambda x: x["most_cards"], reverse=True)
+                [:5], 1
+                ):
+            print(f"{i}. {score['name']}: {score['most_cards']} cards")
+
+        print("\nMost Chips:")
+        for i, score in enumerate(
+            sorted(
+                high_scores, key=lambda x: x
+                ["most_chips"], reverse=True)[:5], 1
+        ):
+            print(f"{i}. {score['name']}: {score['most_chips']} chips")
+    else:
+        print("\nNo high scores yet!")
+    input("\nPress Enter to return to the main menu...")
+
+
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
