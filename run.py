@@ -500,4 +500,41 @@ def handle_exit(signum, frame):
 signal.signal(signal.SIGINT, handle_exit)
 
 
+def get_user_input(prompt, valid_range=None):
+    """
+    Prompts the user for input and validates it.
+
+    Args:
+        prompt (str): The message displayed to the user.
+        valid_range (range, optional): A range of valid integer values.
+
+    Returns:
+        str or int: The user's input as a string or integer.
+    """
+    global accepting_input
+    while True:
+        if not accepting_input:
+            print("Input is currently disabled. Please wait.")
+            time.sleep(1) # Wait for 1 second
+            continue
+
+        user_input = input(prompt).lower()
+        if user_input in ['quit', 'exit']:
+            print("Exiting the game. Thanks for playing!")
+            exit(0)
+        if valid_range:
+            try:
+                value = int(user_input)
+                if value in valid_range:
+                    return value
+                print((
+                    f"Please enter a number between {valid_range.start} "
+                    f"and {valid_range.stop - 1}."
+                ))
+            except ValueError:
+                print("Please enter a valid number.")
+        else:
+            return user_input
+
+
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
