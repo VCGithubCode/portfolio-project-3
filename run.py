@@ -324,6 +324,30 @@ def display_welcome_screen():
     print("5. Quit")
 
 
+def display_instructions():
+    print("\nGame Rules:")
+    print(f"1. Each player starts with {INITIAL_CHIPS} chips.")
+    print("2. The deck is divided evenly between you and the computer.")
+    print("3. Each round, you can bet a number of chips "
+          "(minimum 1, maximum based on remaining rounds).")
+    print("4. Both players reveal their top card.")
+    print("5. The player with the higher card wins the round and the bet.")
+    print("6. If there's a tie, a 'war' occurs with increased betting.")
+    print("7. Face cards (J, Q, K, A) have special powers when played.")
+    print("8. The game ends after the chosen number of rounds, "
+          "when a player runs out of cards, or goes bankrupt.")
+    print("9. Scoring:")
+    print("   - Each card in your possession at the end is worth 10 points.")
+    print("   - Each chip you have at the end is worth 1 point.")
+    print("10. The player with the highest total score wins the game.")
+    print("11. If you go bankrupt, you lose 100 points from your final score.")
+    print("12. If you bankrupt the computer, "
+          "you gain an additional 100 points.")
+    print("13. Leaderboards track highest score, most cards won, "
+          "and most chips across all games.")
+    input("\nPress Enter to return to the main menu...")
+
+
 
 
 print(f"{MAGENTA}Welcome to the game of war cards!{RESET}")
